@@ -1,0 +1,132 @@
+<mvc:View
+    controllerName="registros.controller.Main"
+    xmlns:core="sap.ui.core"
+    xmlns:mvc="sap.ui.core.mvc"
+    displayBlock="true"
+    xmlns="sap.m"
+>
+    <Shell id="shell">
+        <App id="app">
+            <pages>
+                <Page id="page" title="{i18n>title}">
+                    <content>
+                        <Panel width="auto" class="sapUiResponsiveMargin">
+                        <headerToolbar>
+			                <OverflowToolbar>
+			                    <Title text="Registro de Ingresos" level="H2"/>
+			                </OverflowToolbar>
+		                </headerToolbar>     
+
+                        <HBox width="100%">
+                            <VBox width="20%">
+                                <Label text="Codigo:" class="labelsEdit" labelFor="txtCodigo" required="true"/>
+                                <Input type="Text" id="txtCodigo" required="true"/>
+                            </VBox>
+                            <VBox width="10%"/>
+                            <VBox width="30%">
+                                <Label text="Nombre Completo:" class="labelsEdit" labelFor="txtNombre"/>
+                                <Input type="Text" id="txtNombre" required="true" />
+                            </VBox>
+                            <VBox width="10%"/>
+                             <VBox width="30%">
+                                <Label text="Cargo:" labelFor="cbCargos"/>
+                                <ComboBox id="cbCargos" required="true" items="{ path: 'mainModel>/Cargos', sorter: [{path:'nombreCargo',descending:false}] }">
+                                    <core:Item key="{mainModel>nombreCargo}" text="{mainModel>nombreCargo}" />
+                                </ComboBox>
+                            </VBox>
+                        </HBox>   
+                        <HBox width="100%">
+                            <VBox width="20%">
+                               <Label text="Hora de Ingreso:" labelFor="fechaIngreso"/>
+                               <DateTimePicker id="fechaIngreso"  valueFormat="yyyy-MM-dd - HH:mm:ss" displayFormat="yyyy-MM-dd - HH:mm:ss" required="true"/>
+                            </VBox>
+                            <VBox width="10%"/>
+                            <VBox width="20%">
+                              <Label text="Hora de Salida:" labelFor="fechaSalida"/>
+                              <DateTimePicker id="fechaSalida"  valueFormat="yyyy-MM-dd - HH:mm:ss" displayFormat="yyyy-MM-dd - HH:mm:ss" required="true"/>
+                            </VBox>
+                        </HBox> 
+                        <HBox width="100%">
+                            <Button type="Accept" icon="" text="Guardar"   press="onGuardar" />
+                        </HBox>  
+                    </Panel>
+
+                    <Panel width="auto" class="sapUiResponsiveMargin">
+
+                        <headerToolbar>
+			                <OverflowToolbar>
+			                     <Title text="Listado de Ingresos" level="H2"/>
+			                </OverflowToolbar>
+		                </headerToolbar>
+
+                        <HBox width="100%">
+                            <VBox width="20%">
+                                 <Label text="Cargo:" labelFor="cbCargo"/>
+                                <ComboBox id="cbCargo" items="{ path: 'mainModel>/Cargos', sorter: [{path:'nombreCargo',descending:false}] }">
+                                        <core:Item key="{mainModel>nombreCargo}" text="{mainModel>nombreCargo}" />
+                                    </ComboBox>
+                                    
+                                  <!--  <ComboBox id="cbCargo">
+                                        <core:Item key="C JUNIOR" text="C JUNIOR" />
+                                        <core:Item key="C DEV" text="C DEV" />
+                                        <core:Item key="C LEADER" text="C LEADER" />
+                                        <core:Item key="SUPERVISOR" text="SUPERVISOR" />
+                                    </ComboBox>-->
+                            </VBox>
+                            <VBox width="10%"/>
+                            <VBox width="30%">
+                                <Label text="Fecha:" labelFor="rangoFecha"/>
+                                <DateRangeSelection  id="rangoFecha"  displayFormat="yyyy-MM-dd"/>
+                            </VBox>  
+                            <VBox width="10%"/>
+                            <Button type="Accept" icon="" text="Search"   press="onListarIngresos" />
+
+                        </HBox>
+
+                      
+                        <Table id="tblIngresos" items="{
+                            path:'mainModel>/Ingresos',sorter:[{path:'horaIngreso',descending:true}] }"
+                            growing="true" growingThreshold="10" mode="SingleSelectMaster">
+						<headerToolbar>
+							<OverflowToolbar>
+								<Title text="" level="H2"/>
+								<ToolbarSpacer/>
+								<Text id="txtCantidad" text="{mainModel>/Ingresos/$count}" visible="false"></Text>
+							</OverflowToolbar>
+						</headerToolbar>
+						<columns>
+							<Column>
+								<Text text="Codigo de Empleado"></Text>
+							</Column>
+							<Column>
+								<Text text="Nombre Completo"></Text>
+							</Column>
+							<Column>
+								<Text text="Cargo"></Text>
+							</Column>
+							<Column>
+								<Text text="Hora de Ingreso"></Text>
+							</Column>
+                            <Column>
+								<Text text="Hora de Salida"></Text>
+							</Column>							
+						</columns>
+						<items>
+							<ColumnListItem>
+								<Text text="{mainModel>codigo}"></Text>
+								<Text text="{mainModel>nombre}"></Text>
+								<Text text="{mainModel>cargo}"></Text>
+								<Text text="{path: 'mainModel>horaIngreso', type: 'sap.ui.model.odata.type.DateTimeOffset',
+								formatOptions:{pattern:'dd/MM/yyyy - HH:mm:ss', strictParsing: true , UTC: true}}"></Text>
+                                <Text text="{path: 'mainModel>horaSalida', type: 'sap.ui.model.odata.type.DateTimeOffset', formatOptions: {pattern:'dd/MM/yyyy - HH:mm:ss', strictParsing: true , UTC: true}}"></Text>
+							</ColumnListItem>
+						</items>
+					</Table>
+
+                    </Panel>
+                    </content>
+                </Page>
+            </pages>
+        </App>
+    </Shell>
+</mvc:View>

@@ -1,0 +1,177 @@
+{
+  "namespace": "app.schema",
+  "definitions": {
+    "app.schema.Cargos": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "nombreCargo": {
+          "type": "cds.String",
+          "length": 30
+        }
+      }
+    },
+    "app.schema.Empleados": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "codigoEmpleado": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "nombreEmpleado": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "cargo": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "app.schema.Cargos",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "app.schema.Ingresos": {
+      "kind": "entity",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "codigo": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "nombre": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "cargo": {
+          "type": "cds.String",
+          "length": 30
+        },
+        "horaIngreso": {
+          "type": "cds.DateTime"
+        },
+        "horaSalida": {
+          "type": "cds.DateTime"
+        }
+      }
+    },
+    "CatalogService": {
+      "@source": "srv/services_srv.cds",
+      "kind": "service"
+    },
+    "CatalogService.Cargos": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "app.schema.Cargos"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "nombreCargo": {
+          "type": "cds.String",
+          "length": 30
+        }
+      }
+    },
+    "CatalogService.Empleados": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "app.schema.Empleados"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "codigoEmpleado": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "nombreEmpleado": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "cargo": {
+          "type": "cds.Association",
+          "cardinality": {
+            "max": 1
+          },
+          "target": "CatalogService.Cargos",
+          "keys": [
+            {
+              "ref": [
+                "ID"
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "CatalogService.Ingresos": {
+      "kind": "entity",
+      "projection": {
+        "from": {
+          "ref": [
+            "app.schema.Ingresos"
+          ]
+        }
+      },
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer"
+        },
+        "codigo": {
+          "type": "cds.String",
+          "length": 12
+        },
+        "nombre": {
+          "type": "cds.String",
+          "length": 60
+        },
+        "cargo": {
+          "type": "cds.String",
+          "length": 30
+        },
+        "horaIngreso": {
+          "type": "cds.DateTime"
+        },
+        "horaSalida": {
+          "type": "cds.DateTime"
+        }
+      }
+    }
+  },
+  "meta": {
+    "creator": "CDS Compiler v2.13.8",
+    "flavor": "inferred"
+  },
+  "$version": "2.0"
+}

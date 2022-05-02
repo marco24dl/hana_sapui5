@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+    <edmx:DataServices>
+        <Schema Namespace="CatalogService" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+            <EntityContainer Name="EntityContainer">
+                <EntitySet Name="Cargos" EntityType="CatalogService.Cargos"/>
+                <EntitySet Name="Empleados" EntityType="CatalogService.Empleados">
+                    <NavigationPropertyBinding Path="cargo" Target="Cargos"/>
+                </EntitySet>
+                <EntitySet Name="Ingresos" EntityType="CatalogService.Ingresos"/>
+            </EntityContainer>
+            <EntityType Name="Cargos">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="nombreCargo" Type="Edm.String" MaxLength="30"/>
+            </EntityType>
+            <EntityType Name="Empleados">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="codigoEmpleado" Type="Edm.String" MaxLength="12"/>
+                <Property Name="nombreEmpleado" Type="Edm.String" MaxLength="60"/>
+                <NavigationProperty Name="cargo" Type="CatalogService.Cargos">
+                    <ReferentialConstraint Property="cargo_ID" ReferencedProperty="ID"/>
+                </NavigationProperty>
+                <Property Name="cargo_ID" Type="Edm.Int32"/>
+            </EntityType>
+            <EntityType Name="Ingresos">
+                <Key>
+                    <PropertyRef Name="ID"/>
+                </Key>
+                <Property Name="ID" Type="Edm.Int32" Nullable="false"/>
+                <Property Name="codigo" Type="Edm.String" MaxLength="12"/>
+                <Property Name="nombre" Type="Edm.String" MaxLength="60"/>
+                <Property Name="cargo" Type="Edm.String" MaxLength="30"/>
+                <Property Name="horaIngreso" Type="Edm.DateTimeOffset"/>
+                <Property Name="horaSalida" Type="Edm.DateTimeOffset"/>
+            </EntityType>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>

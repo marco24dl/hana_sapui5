@@ -1,0 +1,80 @@
+_schema-version: '3.1'
+ID: MyProjectApp
+description: A simple CAP project.
+version: 1.0.0
+modules:
+  - name: MyProjectApp-srv
+    type: nodejs
+    path: gen/srv
+    requires:
+      - name: MyProjectApp-db
+    provides:
+      - name: srv-api
+        properties:
+          srv-url: '${default-url}'
+    parameters:
+      buildpack: nodejs_buildpack
+    build-parameters:
+      builder: npm-ci
+  - name: MyProjectApp-db-deployer
+    type: hdb
+    path: db
+    requires:
+      - name: MyProjectApp-db
+    parameters:
+      buildpack: nodejs_buildpack
+  - name: app
+    type: approuter.nodejs
+    path: app
+    requires:
+      - name: MyProjectApp_html_repo_runtime
+      - name: uaa_MyProjectApp
+      - name: srv-api
+        group: destinations
+        properties:
+          name: srv-api
+          url: '~{srv-url}'
+          forwardAuthToken: true
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+  - name: MyProjectApp_ui_deployer
+    type: com.sap.application.content
+    path: .
+    requires:
+      - name: MyProjectApp_html_repo_host
+        parameters:
+          content-target: true
+resources:
+  - name: MyProjectApp-db
+    type: com.sap.xs.hdi-container
+    parameters:
+      service: hana
+      service-plan: hdi-shared
+    properties:
+      hdi-service-name: '${service-name}'
+  - name: MyProjectApp_html_repo_runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-runtime
+  - name: uaa_MyProjectApp
+    type: org.cloudfoundry.managed-service
+    parameters:
+      path: ./xs-security.json
+      service: xsuaa
+      service-name: MyProjectApp-xsuaa-service
+      service-plan: application
+  - name: MyProjectApp_html_repo_host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: html5-apps-repo
+      service-plan: app-host
+parameters:
+  enable-parallel-deployments: true
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm ci
+        - npx -p @sap/cds-dk cds build --production
